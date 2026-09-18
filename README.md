@@ -51,9 +51,9 @@ for key, value := range m.AllFromFront() {
 // 123 true
 ```
 
-Iterators are safe to use bidirectionally, and will return `nil` once it goes
-beyond the first or last item. If the map is changing while the iteration is
-in-flight it may produce unexpected behavior.
+These range loops stop after the last element yielded by the iterator. If the
+map is changing while the iteration is in-flight it may produce unexpected
+behavior.
 
 If you want to get a slice of the map keys or values, you can use the standard
 `slices.Collect` method with the iterator returned from `Keys()` or `Values()`:
@@ -72,7 +72,9 @@ fmt.Println(maps.Collect(m.AllFromFront()))
 ```
 
 If you don't want to use iterators, you can also manually loop over the elements
-using `Front()` or `Back()` with `Next()`:
+using `Front()` with `Next()`, or `Back()` with `Prev()`. These element pointers
+become `nil` beyond the last or first element, respectively. `Front()` and
+`Back()` return `nil` when the map is empty:
 
 ```go
 // Iterate through all elements from oldest to newest:
